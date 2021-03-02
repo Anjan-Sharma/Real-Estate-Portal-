@@ -24,4 +24,14 @@ price_choices = {
     '100000000':'Rs.10 Crore+'
 }
 
+state_choices={
+    '1':'Province No.1',
+    '2':'Province No. 2',
+    '3':'Bagmati Pradesh',
+    '4':'Gandaki Pradesh',
+    '5':'Province No. 5',
+    '6':'Karnali Pradesh',
+    '7':'Sudurpashchim Pradesh',
+    }
+
     

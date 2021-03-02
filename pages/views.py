@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from .choices import price_choices, bedroom_choices
+from listings.choices import price_choices, bedroom_choices
 
-from .models import Listing 
+from listings.models import Listing 
 
 def index(request):
     listings = Listing.objects.order_by('-list_date').filter(is_published=True)
@@ -63,3 +63,6 @@ def search(request):
     }
 
     return render(request, 'listings/search.html', context)
+
+def about(request):
+  return render(request, 'pages/about.html')
