@@ -4,6 +4,7 @@ from listings.choices import price_choices, bedroom_choices
 
 from listings.models import Listing
 from realtors.models import Realtor
+from spam.views import detect_spam
 
 
 def index(request):
@@ -12,6 +13,7 @@ def index(request):
     paginator = Paginator(listings, 3)
     page = request.GET.get('page')
     paged_listings = paginator.get_page(page)
+    detect_spam()
 
     context = {
         'listings': paged_listings
