@@ -2,12 +2,14 @@ from django.shortcuts import get_object_or_404, render
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from listings.choices import price_choices, bedroom_choices
 
-from listings.models import Listing 
+from listings.models import Listing
+from realtors.models import Realtor
+
 
 def index(request):
     listings = Listing.objects.order_by('-list_date').filter(is_published=True)
 
-    paginator = Paginator(listings, 3)    
+    paginator = Paginator(listings, 3)
     page = request.GET.get('page')
     paged_listings = paginator.get_page(page)
 
@@ -65,4 +67,10 @@ def search(request):
     return render(request, 'listings/search.html', context)
 
 def about(request):
-  return render(request, 'pages/about.html')
+    mvp_realtor = Realtor.objects.all().filter(is_mvp=True)
+    realtors = Realtor.objects.all()
+    context = {
+        'mvp_realtors':mvp_realtor,
+        'realtors':realtors,
+    }
+    return render(request, 'pages/about.html',context=context)
