@@ -6,6 +6,7 @@ from .models import Spam_filtering
 from django.shortcuts import redirect
 from listings.models import Listing
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages, auth
 
 # Create your views here.
 mdl = joblib.load("model_pickle")
@@ -52,9 +53,8 @@ def detect_spam(request,listing_id):
         if predict == 'spam':
             # messages.error(request,
             #                "Looks like you have posted something that is spam in comment so your comment cannot be posted! Thank you!")
-            message = ("Looks like you have posted something that is spam in comment so your comment cannot be posted! Thank you!")
+            messages.error(request,"Looks like you have posted something that is spam in comment so your comment cannot be posted! Thank you!")
         else:
-            message = ("Your comment has been posted thank you for your response")
+            messages.success(request,"Your comment has been posted thank you for your response")
             # messages.success(request, "Your comment has been posted thank you for your response")
-        print(message)
         return redirect('/listings/' + listing_id)
