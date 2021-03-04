@@ -3,6 +3,9 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import confusion_matrix, accuracy_score
 from .models import Spam_filtering
+from django.shortcuts import redirect
+from listings.models import Listing
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 mdl = joblib.load("model_pickle")
@@ -32,13 +35,26 @@ def listToString(s):
         # return string
     return str1
 
-
-def detect_spam():
-    message = "Hello"
-    example_counts = vectorizer.transform(Convert(message))
-
-    predictions = mdl.predict(example_counts)
-    predict = listToString(predictions)
-    spam_detection = Spam_filtering(comments=message, type=predict)
-    spam_detection.save()
-    print(predict)
+@login_required(login_url="/accounts/login")
+def detect_spam(request,listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    if request.method == 'POST':
+        listing_id = request.POST['listing_id_value']
+        comments = request.POST['message']
+        type = request.POST['type']
+        example_counts = vectorizer.transform(Convert(comments))
+        listToString(comments)
+        predictions = mdl.predict(example_counts)
+        predict = listToString(predictions)
+        spam_detection = Spam_filtering(comments=comments, type=predict, user=request.user, listing=listing)
+        spam_detection.save()
+        print(listToString(type))
+        if predict == 'spam':
+            # messages.error(request,
+            #                "Looks like you have posted something that is spam in comment so your comment cannot be posted! Thank you!")
+            message = ("Looks like you have posted something that is spam in comment so your comment cannot be posted! Thank you!")
+        else:
+            message = ("Your comment has been posted thank you for your response")
+            # messages.success(request, "Your comment has been posted thank you for your response")
+        print(message)
+        return redirect('/listings/' + listing_id)

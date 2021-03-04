@@ -116,13 +116,46 @@
               <h6 class="text-secondary">{{ listing.realtor }}</h6>
             </div>
           </div>
-          <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Make An Inquiry</button>
+          <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Make An Inquiry
+          </button>
         </div>
       </div>
     </div>
   </section>
+<div class="contact-realtor-wrapper" style="background:white">
+  <div class="col-12">
+    <div class="form-group">
+
+      <h2>Comments: </h2>
+      <form action="{% url 'detect_spam' listing.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ comments.user.username }}">
+        <input type="hidden" name="listing_id_value" value="{{ listing.id }}">
+        <input type="hidden" name="type">
+        <textarea rows="2" cols="200" name="message" class="form-control" id="realtor-message" cols="30" rows="10"
+                  placeholder="Write Your Comment on the house" required></textarea>
+        <input type="submit" style="background-color:#10284e; margin-top:5%; border:none;" value="Post"
+               class="btn btn-block btn-secondary form-control">
+      </form>
+    </div>
+
+    <div class="main-comment-section">
+      {{ comments.count }} Comment {{ comments|pluralize }}
+
+      {% for comment in comments %}
+      <blockquote class="blockquote">
+        <p class="mb-o">{{ comment.comments }}</p>
+        <footer class="blackquote-footer">by <cite title="Source Title">{{ comment.user | capfirst }}</cite></footer>
+      </blockquote>
+      {% endfor %}
+    </div>
+
+
+  </div>
+</div>
+
 
   <!-- Inquiry Modal -->
 
 
-{% endblock %}
+  {% endblock %}

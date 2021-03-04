@@ -13,7 +13,7 @@ def index(request):
     paginator = Paginator(listings, 3)
     page = request.GET.get('page')
     paged_listings = paginator.get_page(page)
-    detect_spam()
+    # detect_spam()
 
     context = {
         'listings': paged_listings
